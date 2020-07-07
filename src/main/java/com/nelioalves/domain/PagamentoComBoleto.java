@@ -2,8 +2,13 @@ package com.nelioalves.domain;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.nelioalves.enums.EstadoPagamento;
 
+@Entity
+@Table(name = "pagamentos_com_boleto")
 public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 
