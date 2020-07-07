@@ -83,7 +83,7 @@ public class PedidosApiApplication implements CommandLineRunner {
 		cli1.getTelefones().addAll(Arrays.asList("2233-4455", "99988-7766"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Bangu", "38220834", cli1, c1);
-		Endereco e2 = new Endereco(null, "Av. MAtos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+		Endereco e2 = new Endereco(null, "Av. Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		
