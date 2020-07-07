@@ -3,7 +3,11 @@ package com.nelioalves.domain;
 import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "itens_pedido")
 public class ItemPedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
