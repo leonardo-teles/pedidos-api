@@ -1,6 +1,8 @@
 package com.nelioalves.resource;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nelioalves.domain.Categoria;
+import com.nelioalves.dto.CategoriaDTO;
 import com.nelioalves.service.CategoriaService;
 
 @RestController
@@ -54,9 +57,12 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}	
 		
+	@GetMapping
+	public ResponseEntity<List<CategoriaDTO>> listar() {
+		List<Categoria> lista = categoriaService.listarTodas();
+		List<CategoriaDTO> listaDto = lista.stream().map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
 		
-		
-		
-		
+		return ResponseEntity.ok().body(listaDto);
+	}
 	
 }
