@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.nelioalves.domain.Categoria;
+import com.nelioalves.dto.CategoriaDTO;
 import com.nelioalves.repository.CategoriaRepository;
 import com.nelioalves.service.exception.DataIntegrityException;
 import com.nelioalves.service.exception.ObjectNotFoundException;
@@ -57,5 +58,9 @@ public class CategoriaService {
 		PageRequest pageRequest = PageRequest.of(pagina, linhasPorPagina, Direction.valueOf(direcaoOrdenacao), ordernarPor);
 		
 		return categoriaRepository.findAll(pageRequest);
+	}
+	
+	public Categoria converterDeDTO(CategoriaDTO categoriaDto) {
+		return new Categoria(categoriaDto.getId(), categoriaDto.getNome());
 	}
 }
