@@ -38,7 +38,6 @@ public class ClienteResource {
 		
 		return ResponseEntity.ok().body(cliente);
 	}
-	
 
   	@PostMapping
 	public ResponseEntity<Void> inserir(@Valid @RequestBody ClienteNovoDTO clienteNovoDTO) {
@@ -50,8 +49,6 @@ public class ClienteResource {
 		
 		return ResponseEntity.created(uri).build();
 	}
-	
- 
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> atualizar(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Integer id) {
@@ -68,7 +65,7 @@ public class ClienteResource {
 		clienteService.apagar(id);
 		
 		return ResponseEntity.noContent().build();
-	}
+	}	
 	
 	@GetMapping
 	public ResponseEntity<List<ClienteDTO>> listar() {
