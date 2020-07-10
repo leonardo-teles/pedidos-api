@@ -8,8 +8,10 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.nelioalves.service.validation.CPFCNPJ;
+import com.nelioalves.service.validation.EMAIL;
 
 @CPFCNPJ
+@EMAIL
 public class ClienteNovoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 

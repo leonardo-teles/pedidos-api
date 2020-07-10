@@ -6,27 +6,29 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.nelioalves.domain.Cliente;
 import com.nelioalves.dto.ClienteNovoDTO;
-import com.nelioalves.enums.TipoCliente;
+import com.nelioalves.repository.ClienteRepository;
 import com.nelioalves.resource.exception.FieldMessage;
-import com.nelioalves.service.validation.util.BR;
 
-public class CPFCNPJValidator implements ConstraintValidator<CPFCNPJ, ClienteNovoDTO> {
+public class EMAILValidator implements ConstraintValidator<EMAIL, ClienteNovoDTO> {
 
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
 	@Override
-	public void initialize(CPFCNPJ constraintAnnotation) {}
+	public void initialize(EMAIL constraintAnnotation) {}
 
 	@Override
 	public boolean isValid(ClienteNovoDTO clienteNovoDTO, ConstraintValidatorContext context) {
-		
+
 		List<FieldMessage> lista = new ArrayList<>();
 		
-		if (clienteNovoDTO.getTipo().equals(TipoCliente.PESSOA_FISICA.getCodigo()) && !BR.isValidCPF(clienteNovoDTO.getCpfOuCnpj())) {
-			lista.add(new FieldMessage("cpfOuCnpj", "CPF inválido"));
-		}
-		
-		if (clienteNovoDTO.getTipo().equals(TipoCliente.PESSOA_JURIDICA.getCodigo()) && !BR.isValidCNPJ(clienteNovoDTO.getCpfOuCnpj())) {
-			lista.add(new FieldMessage("cpfOuCnpj", "CNPJ inválido"));
+		Cliente cliente = clienteRepository.findByEmail(clienteNovoDTO.getEmail());
+		if (cliente != null) {
+			lista.add(new FieldMessage("email", "e-Mail já existente"));
 		}
 		
 		for (FieldMessage e : lista) {
