@@ -35,6 +35,9 @@ public class ProdutoService {
 		PageRequest pageRequest = PageRequest.of(pagina, linhasPorPagina, Direction.valueOf(direcaoOrdenacao), ordernarPor);
 		List<Categoria> categorias = categoriaRepository.findAllById(ids); 
 		
+		//sem uso da anotação @Query
+		//return produtoRepository.findDistinctByNomeContainingAndCategoriasIn(nome, categorias, pageRequest);
+		
 		return produtoRepository.buscar(nome, categorias, pageRequest);
 	} 
 }
