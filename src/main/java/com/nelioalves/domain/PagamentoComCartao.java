@@ -3,10 +3,12 @@ package com.nelioalves.domain;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.nelioalves.enums.EstadoPagamento;
 
 @Entity
 @Table(name = "pagamentos_com_cartao")
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	

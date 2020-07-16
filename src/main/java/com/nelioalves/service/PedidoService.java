@@ -1,11 +1,18 @@
 package com.nelioalves.service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.nelioalves.domain.ItemPedido;
+import com.nelioalves.domain.PagamentoComBoleto;
 import com.nelioalves.domain.Pedido;
+import com.nelioalves.enums.EstadoPagamento;
+import com.nelioalves.repository.ItemPedidoRepository;
+import com.nelioalves.repository.PagamentoRepository;
 import com.nelioalves.repository.PedidoRepository;
 import com.nelioalves.service.exception.ObjectNotFoundException;
 
@@ -15,11 +22,50 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
+	@Autowired
+	private BoletoService boletoService;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ProdutoService produtoService;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+	
 	public Pedido buscarPorId(Integer id) {
 		Optional<Pedido> opt = pedidoRepository.findById(id);
 
 		return opt.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado. Id: " + id + ", Tipo: " + Pedido.class.getName()));
+	}
+
+	@Transactional
+	public Pedido salvar(Pedido pedido) {
+		pedido.setId(null);
+		pedido.setInstante(new Date());
+		pedido.getPagamento().setEstado(EstadoPagamento.PENDENDTE);
+		pedido.getPagamento().setPedido(pedido);
+		
+		//gera a data de vencimento(7 dias após a data atual) com uma classe auxiliar, caso o pagamento seja com boleto
+		if(pedido.getPagamento() instanceof PagamentoComBoleto) {
+			PagamentoComBoleto pgto = (PagamentoComBoleto) pedido.getPagamento();
+			boletoService.preencherPagamentoComBoleto(pgto, pedido.getInstante());
+		}
+		
+		pedido = pedidoRepository.save(pedido);
+		pagamentoRepository.save(pedido.getPagamento());
+		
+		for(ItemPedido ip : pedido.getItens()) {
+			ip.setDesconto(0.0);
+			ip.setPreco(produtoService.buscarPorId(ip.getProduto().getId()).getPreco());
+			ip.setPedido(pedido);
+		}
+		
+		itemPedidoRepository.saveAll(pedido.getItens());
+		
+		return pedido;
 	}
 	 
 }
