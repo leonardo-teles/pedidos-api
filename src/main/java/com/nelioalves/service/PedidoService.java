@@ -37,6 +37,9 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public Pedido buscarPorId(Integer id) {
 		Optional<Pedido> opt = pedidoRepository.findById(id);
 
@@ -69,7 +72,8 @@ public class PedidoService {
 		}
 		
 		itemPedidoRepository.saveAll(pedido.getItens());
-		System.out.println(pedido);
+		
+		emailService.enviarEmailDeConfirmacaoDePedido(pedido);
 		
 		return pedido;
 	}
