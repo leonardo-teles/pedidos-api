@@ -32,6 +32,9 @@ public class PedidoService {
 	private ProdutoService produtoService;
 	
 	@Autowired
+	private ClienteService clienteService;
+	
+	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 	
 	public Pedido buscarPorId(Integer id) {
@@ -45,6 +48,7 @@ public class PedidoService {
 	public Pedido salvar(Pedido pedido) {
 		pedido.setId(null);
 		pedido.setInstante(new Date());
+		pedido.setCliente(clienteService.buscarPorId(pedido.getCliente().getId()));
 		pedido.getPagamento().setEstado(EstadoPagamento.PENDENDTE);
 		pedido.getPagamento().setPedido(pedido);
 		
@@ -59,11 +63,13 @@ public class PedidoService {
 		
 		for(ItemPedido ip : pedido.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.buscarPorId(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.buscarPorId(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(pedido);
 		}
 		
 		itemPedidoRepository.saveAll(pedido.getItens());
+		System.out.println(pedido);
 		
 		return pedido;
 	}
