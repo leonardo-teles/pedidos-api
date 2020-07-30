@@ -29,7 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] URLS_PUBLICAS_GET = {
 			"/produtos/**",
-			"/categorias/**"		
+			"/categorias/**",
+			"/clientes/**"
 	};
 	
 	@Override
