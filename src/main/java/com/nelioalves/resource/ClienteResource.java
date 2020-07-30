@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +62,7 @@ public class ClienteResource {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Void> apagar(@PathVariable Integer id) {
 		clienteService.apagar(id);
 		
@@ -68,6 +70,7 @@ public class ClienteResource {
 	}	
 	
 	@GetMapping
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<List<ClienteDTO>> listar() {
 		List<Cliente> lista = clienteService.listarTodos();
 		List<ClienteDTO> listaDto = lista.stream().map(cliente -> new ClienteDTO(cliente)).collect(Collectors.toList());
@@ -76,6 +79,7 @@ public class ClienteResource {
 	}
 	
 	@GetMapping(value = "/page")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Page<ClienteDTO>> listarComPaginacao(@RequestParam(value = "pagina", defaultValue = "0") Integer pagina, 
 			@RequestParam(value = "linhasPorPagina", defaultValue = "24") Integer linhasPorPagina, 
 			@RequestParam(value = "ordenarPor", defaultValue = "nome") String ordernarPor, 
