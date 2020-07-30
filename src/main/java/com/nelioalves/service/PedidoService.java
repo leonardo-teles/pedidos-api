@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nelioalves.domain.Cliente;
 import com.nelioalves.domain.ItemPedido;
 import com.nelioalves.domain.PagamentoComBoleto;
 import com.nelioalves.domain.Pedido;
@@ -14,6 +18,8 @@ import com.nelioalves.enums.EstadoPagamento;
 import com.nelioalves.repository.ItemPedidoRepository;
 import com.nelioalves.repository.PagamentoRepository;
 import com.nelioalves.repository.PedidoRepository;
+import com.nelioalves.security.UsuarioSistema;
+import com.nelioalves.service.exception.AuthorizationException;
 import com.nelioalves.service.exception.ObjectNotFoundException;
 
 @Service
@@ -77,5 +83,19 @@ public class PedidoService {
 		
 		return pedido;
 	}
-	 
+	
+	public Page<Pedido> listarComPaginacao(Integer pagina, Integer linhasPorPagina, String ordernarPor, String direcaoOrdenacao) {
+	
+		UsuarioSistema usuarioSistema = UserService.usuarioLogado();
+		
+		if (usuarioSistema == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
+		PageRequest pageRequest = PageRequest.of(pagina, linhasPorPagina, Direction.valueOf(direcaoOrdenacao), ordernarPor);
+		
+		Cliente cliente = clienteService.buscarPorId(usuarioSistema.getId());
+		
+		return pedidoRepository.findByCliente(cliente, pageRequest);
+	}	
 }
