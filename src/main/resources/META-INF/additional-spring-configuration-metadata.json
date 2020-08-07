@@ -38,5 +38,20 @@
     "name": "s3.region",
     "type": "java.lang.String",
     "description": "A description for 's3.region'"
+  },
+  {
+    "name": "img.prefix.client.profile",
+    "type": "java.lang.String",
+    "description": "A description for 'img.prefix.client.profile'"
+  },
+  {
+    "name": "img.prefix.cliente.imagem",
+    "type": "java.lang.String",
+    "description": "A description for 'img.prefix.cliente.imagem'"
+  },
+  {
+    "name": "img.prefix.cliente",
+    "type": "java.lang.String",
+    "description": "A description for 'img.prefix.cliente'"
   }
 ]}

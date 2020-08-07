@@ -1,10 +1,12 @@
 package com.nelioalves.service;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +44,12 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService imageService;
+	
+	@Value("${img.prefix.cliente}")
+	private String prefixo;
 	
 	public Cliente buscarPorId(Integer id) {
 		UsuarioSistema usuarioSistema = UserService.usuarioLogado();
@@ -130,13 +138,10 @@ public class ClienteService {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
-		URI uri = s3Service.upload(multipartFile);
+		BufferedImage imagemJpg = imageService.getJpgImage(multipartFile);
+		String arquivo = prefixo + usuarioSistema.getId() + ".jpg";
 		
-		Optional<Cliente> cliente = clienteRepository.findById(usuarioSistema.getId());
-		cliente.orElse(null).setUrlImagem(uri.toString());
-		clienteRepository.save(cliente.orElse(null));
-		
-		return uri;
+		return s3Service.upload(imageService.getInputStream(imagemJpg, "jpg"), arquivo, "image");
 	}
 
 }
