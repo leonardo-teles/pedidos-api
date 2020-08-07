@@ -42,14 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	};
 
 	private static final String[] URLS_PUBLICAS_GET = {
-			"/produtos/**",
-			"/categorias/**"
+		"/produtos/**",
+		"/categorias/**"
 	};
 
 	private static final String[] URLS_PUBLICAS_POST = {
-			"/clientes",
-			"/clientes/foto",
-			"/auth/esqueci/**"
+		"/clientes",
+		"/auth/esqueci/**"
 	};
 	
 	@Override

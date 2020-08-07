@@ -44,8 +44,8 @@ public class ClienteService {
 	private S3Service s3Service;
 	
 	public Cliente buscarPorId(Integer id) {
-		
 		UsuarioSistema usuarioSistema = UserService.usuarioLogado();
+		
 		if (usuarioSistema == null || !usuarioSistema.hasRole(Perfil.ADMINISTRADOR) && !id.equals(usuarioSistema.getId())) {
 			throw new AuthorizationException("Acesso Negado");
 		}
@@ -124,7 +124,19 @@ public class ClienteService {
 	}
 	
 	public URI uploadFoto(MultipartFile multipartFile) {
-		return s3Service.upload(multipartFile);
+		UsuarioSistema usuarioSistema = UserService.usuarioLogado();
+		
+		if(usuarioSistema == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		URI uri = s3Service.upload(multipartFile);
+		
+		Optional<Cliente> cliente = clienteRepository.findById(usuarioSistema.getId());
+		cliente.orElse(null).setUrlImagem(uri.toString());
+		clienteRepository.save(cliente.orElse(null));
+		
+		return uri;
 	}
 
 }
