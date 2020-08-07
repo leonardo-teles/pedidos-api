@@ -47,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	};
 
 	private static final String[] URLS_PUBLICAS_POST = {
-			"/clientes/**",
+			"/clientes",
+			"/clientes/foto",
 			"/auth/esqueci/**"
 	};
 	

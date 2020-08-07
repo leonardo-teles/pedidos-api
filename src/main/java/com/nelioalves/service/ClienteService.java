@@ -1,5 +1,6 @@
 package com.nelioalves.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nelioalves.domain.Cidade;
 import com.nelioalves.domain.Cliente;
@@ -37,6 +39,9 @@ public class ClienteService {
 	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Cliente buscarPorId(Integer id) {
 		
@@ -116,6 +121,10 @@ public class ClienteService {
 	private void atualizarCliente(Cliente clienteAtualizado, Cliente cliente) {
 		clienteAtualizado.setNome(cliente.getNome());
 		clienteAtualizado.setEmail(cliente.getEmail());
+	}
+	
+	public URI uploadFoto(MultipartFile multipartFile) {
+		return s3Service.upload(multipartFile);
 	}
 
 }
