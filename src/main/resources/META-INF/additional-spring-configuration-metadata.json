@@ -53,5 +53,10 @@
     "name": "img.prefix.cliente",
     "type": "java.lang.String",
     "description": "A description for 'img.prefix.cliente'"
+  },
+  {
+    "name": "img.size.cliente",
+    "type": "java.lang.String",
+    "description": "A description for 'img.size.cliente'"
   }
 ]}
