@@ -2,7 +2,9 @@ package com.nelioalves.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -86,6 +88,14 @@ public class BDService {
 		Produto p10 = new Produto(null, "Pendente", 1800.00);
 		Produto p11 = new Produto(null, "Shampoo", 90.00);
 		
+		List<Produto> produtos = new ArrayList<Produto>();
+		for (int i = 12; i < 51; i++) {
+			Produto produto = new Produto(null, "Produto " + i, 10.00);
+			cat1.getProdutos().add(produto);
+			produto.getCategorias().add(cat1);
+			produtos.add(produto);
+		}
+		
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
 		cat2.getProdutos().addAll(Arrays.asList(p2, p4));
 		cat3.getProdutos().addAll(Arrays.asList(p5, p6));
@@ -108,6 +118,7 @@ public class BDService {
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
+		produtoRepository.saveAll(produtos);
 		
 		Estado est1 = new Estado(null, "Rio de Janeiro");
 		Estado est2 = new Estado(null, "Minas Gerais");
