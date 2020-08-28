@@ -31,6 +31,10 @@ public class ProdutoService {
 				"Objeto não encontrado. Id: " + id + ", Tipo: " + Produto.class.getName()));
 	}
 	
+	public List<Produto> listarTodos() {
+		return produtoRepository.findAll();
+	}
+	
 	public Page<Produto> buscarComPaginacao(String nome, List<Integer> ids, Integer pagina, Integer linhasPorPagina, String ordernarPor, String direcaoOrdenacao) {
 		PageRequest pageRequest = PageRequest.of(pagina, linhasPorPagina, Direction.valueOf(direcaoOrdenacao), ordernarPor);
 		List<Categoria> categorias = categoriaRepository.findAllById(ids); 
